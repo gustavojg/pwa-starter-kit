@@ -90,7 +90,7 @@ class MyView3 extends connect(store)(PageViewElement) {
   }
 
   // This is called every time something is updated in the store.
-  stateChanged(state) {
+  _stateChanged(state) {
     this._quantity = cartQuantitySelector(state);
     this._error = state.shop.error;
   }

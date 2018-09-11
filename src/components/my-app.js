@@ -140,10 +140,14 @@ class MyApp extends connect(store)(LitElement) {
     }
   }
 
-  stateChanged(state) {
+  _stateChanged(state) {
     this._page = state.app.page;
     this._offline = state.app.offline;
     this._snackbarOpened = state.app.snackbarOpened;
+  }
+
+  stateChanged(state) {
+    console.log(state)
   }
 }
 

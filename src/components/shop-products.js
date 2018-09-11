@@ -73,7 +73,7 @@ class ShopProducts extends connect(store)(LitElement) {
   }
 
   // This is called every time something is updated in the store.
-  stateChanged(state) {
+  _stateChanged(state) {
     this._products = state.shop.products;
   }
 }

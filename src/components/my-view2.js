@@ -30,6 +30,8 @@ import './counter-element.js';
 // These are the shared styles needed by this element.
 import { SharedStyles } from './shared-styles.js';
 
+import { firebase } from './firebase.js';
+
 class MyView2 extends connect(store)(PageViewElement) {
   static get properties() {
     return {
@@ -68,9 +70,31 @@ class MyView2 extends connect(store)(PageViewElement) {
           </counter-element>
         </p>
       </section>
+      <section>
+        ${
+          this._user ? 
+          html`
+            <h3>
+              Welcome, ${this._user.displayName}
+              <button @click="${() => this._signOut()}">Sign Out</button>
+            </h3>
+          ` : html`
+            <h3>
+              Not signed in
+              <button @click="${() => this._signIn()}">Sign In</button>
+            </h3>
+          `
+        }
+      </section>
     `;
   }
 
+  static get properties() { return {
+    // This is the data from the store.
+    _clicks: { type: Number },
+    _value: { type: Number },
+    _user: { type: Object },
+  }}
   _counterIncremented() {
     store.dispatch(increment());
   }
@@ -80,9 +104,20 @@ class MyView2 extends connect(store)(PageViewElement) {
   }
 
   // This is called every time something is updated in the store.
-  stateChanged(state) {
+  _stateChanged(state) {
+    console.log(state)
     this._clicks = state.counter.clicks;
     this._value = state.counter.value;
+    this._user = state.user.currentUser;
+  }
+
+  _signIn() {
+    var provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithPopup(provider);
+  }
+
+  _signOut() {
+    firebase.auth().signOut();
   }
 }
 
